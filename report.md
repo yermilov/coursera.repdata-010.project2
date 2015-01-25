@@ -966,6 +966,10 @@ select(slice(arrange(data_per_type, desc(TOTAL_POPULATION_DAMAGE)), 1:20), EVTYP
 ## 20         HEAT WAVE              172            379
 ```
 
+As we can see, tornado is totally causes max fatalities and injuries with a huge difference with other types. Other the mosts dangerous for population event types are excessive heat, thunderstorm wind and lighting. Interesting points are:
+* hit and flash flood cause lots of fatalities but small (comparing) number of injuries;
+* flood, ice storm, hurricane, hale cause lots of injuries but small (comparing) number of fatalities.
+
 ### Economical damage
 
 Let's first look at top 10 event types that causes economical damage:
@@ -1083,3 +1087,7 @@ select(slice(arrange(data_per_type, desc(TOTAL_CROP_DAMAGE)), 1:20), EVTYPE, TOT
 ## 19              HEAT         401461500
 ## 20   DAMAGING FREEZE         296230000
 ```
+
+As we can see, flood is totally causes max economical damage with a huge difference with other types. Other the mosts dangerous for economic event types are hurricane, tornado and storm surge. Interesting points are:
+* hit and flash flood cause lots of fatalities but small (comparing) number of injuries;
+* flood, ice storm, hurricane, hale cause lots of injuries but small (comparing) number of fatalities.
