@@ -55,7 +55,23 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 </div>
 
 
+<div id="synopsis" class="section level2">
+<h2>Synopsis</h2>
+</div>
+<div id="data-processing" class="section level2">
+<h2>Data Processing</h2>
+<pre class="r"><code>if (!file.exists(&quot;data&quot;)) {
+    dir.create(&quot;data&quot;)
+}
+download.file(&quot;https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2&quot;, dest = &quot;data/storm_data.csv.bz2&quot;)
 
+library(dplyr)
+data &lt;- tbl_df(read.csv(&quot;data/storm_data.csv.bz2&quot;))
+</code></pre>
+</div>
+<div id="results" class="section level2">
+<h2>Results</h2>
+</div>
 
 
 </div>

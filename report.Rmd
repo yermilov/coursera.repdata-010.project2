@@ -1,3 +1,20 @@
 ---
 title: "The Most Harmful Weather Events Across the United States"
 ---
+
+## Synopsis
+
+## Data Processing
+
+```r
+if (!file.exists("data")) {
+	dir.create("data")
+}
+download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2", dest = "data/storm_data.csv.bz2")
+
+library(dplyr)
+data <- tbl_df(read.csv("data/storm_data.csv.bz2"))
+
+```
+
+## Results
