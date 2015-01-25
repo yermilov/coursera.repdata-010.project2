@@ -68,26 +68,71 @@ data <- mutate(data, EVTYPE = toupper(EVTYPE))
 length(unique(data$EVTYPE))
 ```
 
+#### FATALITIES, INJURIES
+
+Let's exam FATALITIES and INJURIES columns:
+```{r}
+summary(data$FATALITIES)
+summary(data$INJURIES)
+```
+
+As we can see, they are ready for processing.
+
+#### PROPDMG, PROPDMGEXP, CROPDMG, CROPDMGEXP
+
+PROPDMG/CROPDMG describes value of damages causes and PROPDMGEXP/CROPDMGEXP describes magnitude as following:
+* K for $1000
+* M for $1000000
+* B for $1000000000
+
+So we need to merge them into single variable to perform effective furter analysys.
+
 ```{r}
 data <- mutate(data, 
 	PROPERTY_DAMAGE = PROPDMG * ifelse(PROPDMGEXP == 'B', 1000000000, ifelse(PROPDMGEXP == 'M', 1000000, ifelse(PROPDMGEXP == 'K', 1000, 1))), 
 	CROP_DAMAGE = CROPDMG * ifelse(CROPDMGEXP == 'B', 1000000000, ifelse(CROPDMGEXP == 'M', 1000000, ifelse(CROPDMGEXP == 'K', 1000, 1)))
 )
+```
+```{r}
+summary(data$PROPERTY_DAMAGE)
+summary(data$CROP_DAMAGE)
+```
 
+#### Per event damages
+
+Using dplyr grouping, let's group different measurements of damage by their event types:
+
+```{r}
 data_per_type <- summarise(group_by(data, EVTYPE), 
 	TOTAL_FATALITIES = sum(FATALITIES), 
 	TOTAL_INJURIES = sum(INJURIES),
 	TOTAL_PROPERTY_DAMAGE = sum(PROPERTY_DAMAGE),
 	TOTAL_CROP_DAMAGE = sum(CROP_DAMAGE)
 )
+data_per_type
+```
 
+#### Total value
+
+In the end, to simplify further processing, let's calculate some summary damage measurements:
+
+```{r}
 data_per_type <- mutate(data_per_type,
 	TOTAL_POPULATION_DAMAGE = TOTAL_FATALITIES + TOTAL_INJURIES,
 	TOTAL_ECONOMICAL_DAMAGE = TOTAL_PROPERTY_DAMAGE + TOTAL_CROP_DAMAGE
 )
+data_per_type
 ```
 
 ## Results
+
+### Population damage
+
+Let's first look at top 20 event type that causes fatalities:
+
+```{r}
+slice(arrange(data_per_type, desc(TOTAL_FATALITIES)), 1:20)
+```
 
 ```{r}
 ggplot(

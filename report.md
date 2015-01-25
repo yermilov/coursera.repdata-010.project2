@@ -705,24 +705,128 @@ length(unique(data$EVTYPE))
 ## [1] 898
 ```
 
+#### FATALITIES, INJURIES
+
+Let's exam FATALITIES and INJURIES columns:
+
+```r
+summary(data$FATALITIES)
+```
+
+```
+##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+##   0.0000   0.0000   0.0000   0.0168   0.0000 583.0000
+```
+
+```r
+summary(data$INJURIES)
+```
+
+```
+##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+##    0.0000    0.0000    0.0000    0.1557    0.0000 1700.0000
+```
+
+As we can see, they are ready for processing.
+
+#### PROPDMG, PROPDMGEXP, CROPDMG, CROPDMGEXP
+
+PROPDMG/CROPDMG describes value of damages causes and PROPDMGEXP/CROPDMGEXP describes magnitude as following:
+* K for $1000
+* M for $1000000
+* B for $1000000000
+
+So we need to merge them into single variable to perform effective furter analysys.
+
 
 ```r
 data <- mutate(data, 
 	PROPERTY_DAMAGE = PROPDMG * ifelse(PROPDMGEXP == 'B', 1000000000, ifelse(PROPDMGEXP == 'M', 1000000, ifelse(PROPDMGEXP == 'K', 1000, 1))), 
 	CROP_DAMAGE = CROPDMG * ifelse(CROPDMGEXP == 'B', 1000000000, ifelse(CROPDMGEXP == 'M', 1000000, ifelse(CROPDMGEXP == 'K', 1000, 1)))
 )
+```
 
+```r
+summary(data$PROPERTY_DAMAGE)
+```
+
+```
+##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+## 0.000e+00 0.000e+00 0.000e+00 4.735e+05 5.000e+02 1.150e+11
+```
+
+```r
+summary(data$CROP_DAMAGE)
+```
+
+```
+##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+## 0.000e+00 0.000e+00 0.000e+00 5.441e+04 0.000e+00 5.000e+09
+```
+
+#### Per event damages
+
+Using dplyr grouping, let's group different measurements of damage by their event types:
+
+
+```r
 data_per_type <- summarise(group_by(data, EVTYPE), 
 	TOTAL_FATALITIES = sum(FATALITIES), 
 	TOTAL_INJURIES = sum(INJURIES),
 	TOTAL_PROPERTY_DAMAGE = sum(PROPERTY_DAMAGE),
 	TOTAL_CROP_DAMAGE = sum(CROP_DAMAGE)
 )
+data_per_type
+```
 
+```
+## Source: local data frame [898 x 5]
+## 
+##                   EVTYPE TOTAL_FATALITIES TOTAL_INJURIES
+## 1     HIGH SURF ADVISORY                0              0
+## 2          COASTAL FLOOD                0              0
+## 3            FLASH FLOOD                0              0
+## 4              LIGHTNING                0              0
+## 5              TSTM WIND                0              0
+## 6        TSTM WIND (G45)                0              0
+## 7             WATERSPOUT                0              0
+## 8                   WIND                0              0
+## 9                      ?                0              0
+## 10       ABNORMAL WARMTH                0              0
+## ..                   ...              ...            ...
+## Variables not shown: TOTAL_PROPERTY_DAMAGE (dbl), TOTAL_CROP_DAMAGE (dbl)
+```
+
+#### Total value
+
+In the end, to simplify further processing, let's calculate some summary damage measurements:
+
+
+```r
 data_per_type <- mutate(data_per_type,
 	TOTAL_POPULATION_DAMAGE = TOTAL_FATALITIES + TOTAL_INJURIES,
 	TOTAL_ECONOMICAL_DAMAGE = TOTAL_PROPERTY_DAMAGE + TOTAL_CROP_DAMAGE
 )
+data_per_type
+```
+
+```
+## Source: local data frame [898 x 7]
+## 
+##                   EVTYPE TOTAL_FATALITIES TOTAL_INJURIES
+## 1     HIGH SURF ADVISORY                0              0
+## 2          COASTAL FLOOD                0              0
+## 3            FLASH FLOOD                0              0
+## 4              LIGHTNING                0              0
+## 5              TSTM WIND                0              0
+## 6        TSTM WIND (G45)                0              0
+## 7             WATERSPOUT                0              0
+## 8                   WIND                0              0
+## 9                      ?                0              0
+## 10       ABNORMAL WARMTH                0              0
+## ..                   ...              ...            ...
+## Variables not shown: TOTAL_PROPERTY_DAMAGE (dbl), TOTAL_CROP_DAMAGE (dbl),
+##   TOTAL_POPULATION_DAMAGE (dbl), TOTAL_ECONOMICAL_DAMAGE (dbl)
 ```
 
 ## Results
@@ -737,7 +841,7 @@ geom_bar(stat="identity") +
 coord_flip()
 ```
 
-![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png) 
+![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-1.png) 
 
 ```r
 ggplot(
@@ -748,7 +852,7 @@ geom_bar(stat="identity") +
 coord_flip()
 ```
 
-![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-2.png) 
+![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-2.png) 
 
 ```r
 ggplot(
@@ -759,4 +863,4 @@ geom_bar(stat="identity") +
 coord_flip()
 ```
 
-![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-3.png) 
+![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-3.png) 
