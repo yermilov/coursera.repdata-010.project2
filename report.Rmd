@@ -39,6 +39,27 @@ Let's verify data that was downloaded:
 ```{r}
 data
 ```
+```{r}
+summary(data)
+```
+
+### Data preprocessing
+
+Mostly, we are interested in event types, population and economical damage that was caused by them. Following columns contain raw observations that we are interested in:
+* EVTYPE - event type
+* FATALITIES, INJURIES - population damage
+* PROPDMG, PROPDMGEXP - property damage
+* CROPDMG, CROPDMGEXP - crop damage
+
+The data they contain is not ready for processing, so we need to prepare it, one by one.
+
+#### EVTYPE
+
+Let's exam EVTYPE column:
+
+```{r}
+unique(data$EVTYPE)
+```
 
 ```{r}
 data <- mutate(data, EVTYPE = toupper(EVTYPE))

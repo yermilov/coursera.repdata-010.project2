@@ -21,6 +21,10 @@ There is also some documentation of the database available:
 * [National Climatic Data Center Storm Events FAQ](https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2FNCDC%20Storm%20Events-FAQ%20Page.pdf)
 The events in the database start in the year 1950 and end in November 2011. In the earlier years of the database there are generally fewer events recorded, most likely due to a lack of good records. More recent years should be considered more complete.
 
+### Data download
+
+As mentioned before, data is downloaded from [source](https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2) and placed in 'data/' directory. 'dplyr' package is used immediatelly for data processing.
+
 
 ```r
 if (!file.exists("data")) {
@@ -30,7 +34,41 @@ download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.
 
 library(dplyr)
 data <- tbl_df(read.csv("data/storm_data.csv.bz2"))
+```
 
+Let's verify data that was downloaded:
+
+```r
+data
+```
+
+```
+## Source: local data frame [902,297 x 37]
+## 
+##    STATE__           BGN_DATE BGN_TIME TIME_ZONE COUNTY COUNTYNAME STATE
+## 1        1  4/18/1950 0:00:00     0130       CST     97     MOBILE    AL
+## 2        1  4/18/1950 0:00:00     0145       CST      3    BALDWIN    AL
+## 3        1  2/20/1951 0:00:00     1600       CST     57    FAYETTE    AL
+## 4        1   6/8/1951 0:00:00     0900       CST     89    MADISON    AL
+## 5        1 11/15/1951 0:00:00     1500       CST     43    CULLMAN    AL
+## 6        1 11/15/1951 0:00:00     2000       CST     77 LAUDERDALE    AL
+## 7        1 11/16/1951 0:00:00     0100       CST      9     BLOUNT    AL
+## 8        1  1/22/1952 0:00:00     0900       CST    123 TALLAPOOSA    AL
+## 9        1  2/13/1952 0:00:00     2000       CST    125 TUSCALOOSA    AL
+## 10       1  2/13/1952 0:00:00     2000       CST     57    FAYETTE    AL
+## ..     ...                ...      ...       ...    ...        ...   ...
+## Variables not shown: EVTYPE (fctr), BGN_RANGE (dbl), BGN_AZI (fctr),
+##   BGN_LOCATI (fctr), END_DATE (fctr), END_TIME (fctr), COUNTY_END (dbl),
+##   COUNTYENDN (lgl), END_RANGE (dbl), END_AZI (fctr), END_LOCATI (fctr),
+##   LENGTH (dbl), WIDTH (dbl), F (int), MAG (dbl), FATALITIES (dbl),
+##   INJURIES (dbl), PROPDMG (dbl), PROPDMGEXP (fctr), CROPDMG (dbl),
+##   CROPDMGEXP (fctr), WFO (fctr), STATEOFFIC (fctr), ZONENAMES (fctr),
+##   LATITUDE (dbl), LONGITUDE (dbl), LATITUDE_E (dbl), LONGITUDE_ (dbl),
+##   REMARKS (fctr), REFNUM (dbl)
+```
+
+
+```r
 data <- mutate(data, EVTYPE = toupper(EVTYPE))
 
 data <- mutate(data, 
@@ -63,7 +101,7 @@ geom_bar(stat="identity") +
 coord_flip()
 ```
 
-![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png) 
 
 ```r
 ggplot(
@@ -74,7 +112,7 @@ geom_bar(stat="identity") +
 coord_flip()
 ```
 
-![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-2.png) 
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-2.png) 
 
 ```r
 ggplot(
@@ -85,4 +123,4 @@ geom_bar(stat="identity") +
 coord_flip()
 ```
 
-![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-3.png) 
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-3.png) 
