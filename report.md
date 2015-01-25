@@ -6,7 +6,8 @@ title: "The Most Harmful Weather Events Across the United States"
 
 ## Data Processing
 
-```{r}
+
+```r
 if (!file.exists("data")) {
 	dir.create("data")
 }
@@ -37,21 +38,30 @@ data_per_type <- mutate(data_per_type,
 
 ## Results
 
-```{r}
+
+```r
 ggplot(
 	slice(arrange(data_per_type, desc(TOTAL_FATALITIES)), 1:10), 
 	aes(x = reorder(EVTYPE, TOTAL_FATALITIES), y = TOTAL_FATALITIES)
 ) + 
 geom_bar(stat="identity") + 
 coord_flip()
+```
 
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
+
+```r
 ggplot(
 	slice(arrange(data_per_type, desc(TOTAL_INJURIES)), 1:10), 
 	aes(x = reorder(EVTYPE, TOTAL_INJURIES), y = TOTAL_INJURIES)
 ) + 
 geom_bar(stat="identity") + 
 coord_flip()
+```
 
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-2.png) 
+
+```r
 ggplot(
 	slice(arrange(data_per_type, desc(TOTAL_ECONOMICAL_DAMAGE)), 1:10), 
 	aes(x = reorder(EVTYPE, TOTAL_ECONOMICAL_DAMAGE), y = TOTAL_ECONOMICAL_DAMAGE)
@@ -59,3 +69,5 @@ ggplot(
 geom_bar(stat="identity") + 
 coord_flip()
 ```
+
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-3.png) 
