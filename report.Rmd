@@ -59,11 +59,16 @@ Let's exam EVTYPE column:
 
 ```{r}
 unique(data$EVTYPE)
+length(unique(data$EVTYPE))
+```
+
+As we can see, this column contains some irreleval values, mistakes, etc. Size of error them introduce is not huge, so we will perform only some basic cleaning:
+```{r}
+data <- mutate(data, EVTYPE = toupper(EVTYPE))
+length(unique(data$EVTYPE))
 ```
 
 ```{r}
-data <- mutate(data, EVTYPE = toupper(EVTYPE))
-
 data <- mutate(data, 
 	PROPERTY_DAMAGE = PROPDMG * ifelse(PROPDMGEXP == 'B', 1000000000, ifelse(PROPDMGEXP == 'M', 1000000, ifelse(PROPDMGEXP == 'K', 1000, 1))), 
 	CROP_DAMAGE = CROPDMG * ifelse(CROPDMGEXP == 'B', 1000000000, ifelse(CROPDMGEXP == 'M', 1000000, ifelse(CROPDMGEXP == 'K', 1000, 1)))
