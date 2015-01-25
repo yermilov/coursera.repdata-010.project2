@@ -2,7 +2,14 @@
 title: "The Most Harmful Weather Events Across the United States"
 ---
 
+# The Most Harmful Weather Events Across the United States
+
 ## Synopsis
+
+Storms and other severe weather events can cause both public health and economic problems for communities and municipalities. Many severe events can result in fatalities, injuries, and property damage, and preventing such outcomes to the extent possible is a key concern.
+The basic goal of this investigation is to explore the NOAA Storm Database and answer some basic questions about severe weather events:
+* Across the United States, which types of events are most harmful with respect to population health?
+* Across the United States, which types of events have the greatest economic consequences?
 
 ## Data Processing
 
