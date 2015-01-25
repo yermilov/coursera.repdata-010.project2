@@ -215,6 +215,17 @@ The basic goal of this investigation is to explore the NOAA Storm Database and a
 
 <h2>Data Processing</h2>
 
+<h3>Data set</h3>
+
+<p>The U.S. National Oceanic and Atmospheric Administration&#39;s (NOAA) storm database is used for investigation. This database tracks characteristics of major storms and weather events in the United States, including when and where they occur, as well as estimates of any fatalities, injuries, and property damage. The data is downloaded in the form of a comma-separated-value file compressed via the bzip2 algorithm from <a href="https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2">source</a>.
+There is also some documentation of the database available:</p>
+
+<ul>
+<li><a href="https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2Fpd01016005curr.pdf">National Weather Service Storm Data Documentation</a></li>
+<li><a href="https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2FNCDC%20Storm%20Events-FAQ%20Page.pdf">National Climatic Data Center Storm Events FAQ</a>
+The events in the database start in the year 1950 and end in November 2011. In the earlier years of the database there are generally fewer events recorded, most likely due to a lack of good records. More recent years should be considered more complete.</li>
+</ul>
+
 <pre><code class="r">if (!file.exists(&quot;data&quot;)) {
     dir.create(&quot;data&quot;)
 }
