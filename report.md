@@ -799,12 +799,12 @@ data_per_type
 
 #### Total value
 
-In the end, to simplify further processing, let's calculate some summary damage measurements:
+In the end, to simplify further processing, let's calculate some summary damage measurements. Heuristically, we will think about fatality 5 times worse as injury and property damage equal to crop:
 
 
 ```r
 data_per_type <- mutate(data_per_type,
-	TOTAL_POPULATION_DAMAGE = TOTAL_FATALITIES + TOTAL_INJURIES,
+	TOTAL_POPULATION_DAMAGE = 5 * TOTAL_FATALITIES + TOTAL_INJURIES,
 	TOTAL_ECONOMICAL_DAMAGE = TOTAL_PROPERTY_DAMAGE + TOTAL_CROP_DAMAGE
 )
 data_per_type
@@ -831,6 +831,10 @@ data_per_type
 
 ## Results
 
+### Population damage
+
+Let's first look at top 10 event types that causes fatalities:
+
 
 ```r
 ggplot(
@@ -838,10 +842,49 @@ ggplot(
 	aes(x = reorder(EVTYPE, TOTAL_FATALITIES), y = TOTAL_FATALITIES)
 ) + 
 geom_bar(stat="identity") + 
-coord_flip()
+coord_flip() + 
+labs(x = 'Event type') +
+labs(y = 'Fatalities number') +
+labs(title = 'Total fatalities number caused by top 10 event types')
 ```
 
 ![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-1.png) 
+
+Or, more detailed, table with top 20 event types:
+
+
+```r
+select(slice(arrange(data_per_type, desc(TOTAL_FATALITIES)), 1:20), EVTYPE, TOTAL_FATALITIES)
+```
+
+```
+## Source: local data frame [20 x 2]
+## 
+##                     EVTYPE TOTAL_FATALITIES
+## 1                  TORNADO             5633
+## 2           EXCESSIVE HEAT             1903
+## 3              FLASH FLOOD              978
+## 4                     HEAT              937
+## 5                LIGHTNING              816
+## 6                TSTM WIND              504
+## 7                    FLOOD              470
+## 8              RIP CURRENT              368
+## 9                HIGH WIND              248
+## 10               AVALANCHE              224
+## 11            WINTER STORM              206
+## 12            RIP CURRENTS              204
+## 13               HEAT WAVE              172
+## 14            EXTREME COLD              162
+## 15       THUNDERSTORM WIND              133
+## 16              HEAVY SNOW              127
+## 17 EXTREME COLD/WIND CHILL              125
+## 18               HIGH SURF              104
+## 19             STRONG WIND              103
+## 20                BLIZZARD              101
+```
+
+Now, let's look at top 10 event types that causes injuries:
+
 
 ```r
 ggplot(
@@ -849,10 +892,80 @@ ggplot(
 	aes(x = reorder(EVTYPE, TOTAL_INJURIES), y = TOTAL_INJURIES)
 ) + 
 geom_bar(stat="identity") + 
-coord_flip()
+coord_flip() + 
+labs(x = 'Event type') +
+labs(y = 'Injuries number') +
+labs(title = 'Total injuries number caused by top 10 event types')
 ```
 
-![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-2.png) 
+![plot of chunk unnamed-chunk-13](figure/unnamed-chunk-13-1.png) 
+
+Or, more detailed, table with top 20 event types:
+
+
+```r
+select(slice(arrange(data_per_type, desc(TOTAL_INJURIES)), 1:20), EVTYPE, TOTAL_INJURIES)
+```
+
+```
+## Source: local data frame [20 x 2]
+## 
+##                EVTYPE TOTAL_INJURIES
+## 1             TORNADO          91346
+## 2           TSTM WIND           6957
+## 3               FLOOD           6789
+## 4      EXCESSIVE HEAT           6525
+## 5           LIGHTNING           5230
+## 6                HEAT           2100
+## 7           ICE STORM           1975
+## 8         FLASH FLOOD           1777
+## 9   THUNDERSTORM WIND           1488
+## 10               HAIL           1361
+## 11       WINTER STORM           1321
+## 12  HURRICANE/TYPHOON           1275
+## 13          HIGH WIND           1137
+## 14         HEAVY SNOW           1021
+## 15           WILDFIRE            911
+## 16 THUNDERSTORM WINDS            908
+## 17           BLIZZARD            805
+## 18                FOG            734
+## 19   WILD/FOREST FIRE            545
+## 20         DUST STORM            440
+```
+
+Finally, let's look at top 20 event types, calculated by our heuristic algo (fatality 5 times worse as injury):
+
+
+```r
+select(slice(arrange(data_per_type, desc(TOTAL_POPULATION_DAMAGE)), 1:20), EVTYPE, TOTAL_FATALITIES, TOTAL_INJURIES)
+```
+
+```
+## Source: local data frame [20 x 3]
+## 
+##               EVTYPE TOTAL_FATALITIES TOTAL_INJURIES
+## 1            TORNADO             5633          91346
+## 2     EXCESSIVE HEAT             1903           6525
+## 3          TSTM WIND              504           6957
+## 4          LIGHTNING              816           5230
+## 5              FLOOD              470           6789
+## 6               HEAT              937           2100
+## 7        FLASH FLOOD              978           1777
+## 8          ICE STORM               89           1975
+## 9          HIGH WIND              248           1137
+## 10      WINTER STORM              206           1321
+## 11 THUNDERSTORM WIND              133           1488
+## 12       RIP CURRENT              368            232
+## 13        HEAVY SNOW              127           1021
+## 14 HURRICANE/TYPHOON               64           1275
+## 15              HAIL               15           1361
+## 16      RIP CURRENTS              204            297
+## 17          BLIZZARD              101            805
+## 18         AVALANCHE              224            170
+## 19          WILDFIRE               75            911
+## 20         HEAT WAVE              172            379
+```
+
 
 ```r
 ggplot(
@@ -863,4 +976,4 @@ geom_bar(stat="identity") +
 coord_flip()
 ```
 
-![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-3.png) 
+![plot of chunk unnamed-chunk-16](figure/unnamed-chunk-16-1.png) 

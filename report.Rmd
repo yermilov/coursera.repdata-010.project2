@@ -114,11 +114,11 @@ data_per_type
 
 #### Total value
 
-In the end, to simplify further processing, let's calculate some summary damage measurements:
+In the end, to simplify further processing, let's calculate some summary damage measurements. Heuristically, we will think about fatality 5 times worse as injury and property damage equal to crop:
 
 ```{r}
 data_per_type <- mutate(data_per_type,
-	TOTAL_POPULATION_DAMAGE = TOTAL_FATALITIES + TOTAL_INJURIES,
+	TOTAL_POPULATION_DAMAGE = 5 * TOTAL_FATALITIES + TOTAL_INJURIES,
 	TOTAL_ECONOMICAL_DAMAGE = TOTAL_PROPERTY_DAMAGE + TOTAL_CROP_DAMAGE
 )
 data_per_type
@@ -128,11 +128,7 @@ data_per_type
 
 ### Population damage
 
-Let's first look at top 20 event type that causes fatalities:
-
-```{r}
-slice(arrange(data_per_type, desc(TOTAL_FATALITIES)), 1:20)
-```
+Let's first look at top 10 event types that causes fatalities:
 
 ```{r}
 ggplot(
@@ -140,15 +136,45 @@ ggplot(
 	aes(x = reorder(EVTYPE, TOTAL_FATALITIES), y = TOTAL_FATALITIES)
 ) + 
 geom_bar(stat="identity") + 
-coord_flip()
+coord_flip() + 
+labs(x = 'Event type') +
+labs(y = 'Fatalities number') +
+labs(title = 'Total fatalities number caused by top 10 event types')
+```
 
+Or, more detailed, table with top 20 event types:
+
+```{r}
+select(slice(arrange(data_per_type, desc(TOTAL_FATALITIES)), 1:20), EVTYPE, TOTAL_FATALITIES)
+```
+
+Now, let's look at top 10 event types that causes injuries:
+
+```{r}
 ggplot(
 	slice(arrange(data_per_type, desc(TOTAL_INJURIES)), 1:10), 
 	aes(x = reorder(EVTYPE, TOTAL_INJURIES), y = TOTAL_INJURIES)
 ) + 
 geom_bar(stat="identity") + 
-coord_flip()
+coord_flip() + 
+labs(x = 'Event type') +
+labs(y = 'Injuries number') +
+labs(title = 'Total injuries number caused by top 10 event types')
+```
 
+Or, more detailed, table with top 20 event types:
+
+```{r}
+select(slice(arrange(data_per_type, desc(TOTAL_INJURIES)), 1:20), EVTYPE, TOTAL_INJURIES)
+```
+
+Finally, let's look at top 20 event types, calculated by our heuristic algo (fatality 5 times worse as injury):
+
+```{r}
+select(slice(arrange(data_per_type, desc(TOTAL_POPULATION_DAMAGE)), 1:20), EVTYPE, TOTAL_FATALITIES, TOTAL_INJURIES)
+```
+
+```{r}
 ggplot(
 	slice(arrange(data_per_type, desc(TOTAL_ECONOMICAL_DAMAGE)), 1:10), 
 	aes(x = reorder(EVTYPE, TOTAL_ECONOMICAL_DAMAGE), y = TOTAL_ECONOMICAL_DAMAGE)
