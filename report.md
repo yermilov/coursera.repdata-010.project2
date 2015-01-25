@@ -11,6 +11,10 @@ The basic goal of this investigation is to explore the NOAA Storm Database and a
 * Across the United States, which types of events are most harmful with respect to population health?
 * Across the United States, which types of events have the greatest economic consequences?
 
+We will take the U.S. National Oceanic and Atmospheric Administration's (NOAA) storm database for investigations. Additional preprocessing is performed as it's needed before resulting processing.
+Result shows that tornado and flood produces the biggest damage of all types. Tornado, excessive heat, thunderstorm wind and lighting cause the biggest population damage. Flood, hurricane, tornado and storm surge cause the biggest economical damage. Some interesting issues are investigated additionally.
+
+
 ## Data Processing
 
 ### Data set
@@ -1089,5 +1093,5 @@ select(slice(arrange(data_per_type, desc(TOTAL_CROP_DAMAGE)), 1:20), EVTYPE, TOT
 ```
 
 As we can see, flood is totally causes max economical damage with a huge difference with other types. Other the mosts dangerous for economic event types are hurricane, tornado and storm surge. Interesting points are:
-* hit and flash flood cause lots of fatalities but small (comparing) number of injuries;
-* flood, ice storm, hurricane, hale cause lots of injuries but small (comparing) number of fatalities.
+* storm surge makes a big property damage and almost no crop damage;
+* drought makes a big crop damage and small (comparing) property damage.
