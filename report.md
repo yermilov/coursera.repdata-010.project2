@@ -966,6 +966,10 @@ select(slice(arrange(data_per_type, desc(TOTAL_POPULATION_DAMAGE)), 1:20), EVTYP
 ## 20         HEAT WAVE              172            379
 ```
 
+### Economical damage
+
+Let's first look at top 10 event types that causes economical damage:
+
 
 ```r
 ggplot(
@@ -973,7 +977,109 @@ ggplot(
 	aes(x = reorder(EVTYPE, TOTAL_ECONOMICAL_DAMAGE), y = TOTAL_ECONOMICAL_DAMAGE)
 ) + 
 geom_bar(stat="identity") + 
-coord_flip()
+coord_flip() + 
+labs(x = 'Event type') +
+labs(y = 'Economical damage in $') +
+labs(title = 'Total economical damage caused by top 10 event types')
 ```
 
 ![plot of chunk unnamed-chunk-16](figure/unnamed-chunk-16-1.png) 
+
+Or, more detailed, table with top 20 event types:
+
+
+```r
+select(slice(arrange(data_per_type, desc(TOTAL_ECONOMICAL_DAMAGE)), 1:20), EVTYPE, TOTAL_PROPERTY_DAMAGE, TOTAL_CROP_DAMAGE)
+```
+
+```
+## Source: local data frame [20 x 3]
+## 
+##                       EVTYPE TOTAL_PROPERTY_DAMAGE TOTAL_CROP_DAMAGE
+## 1                      FLOOD          144657709807        5661968450
+## 2          HURRICANE/TYPHOON           69305840000        2607872800
+## 3                    TORNADO           56925660790         414953270
+## 4                STORM SURGE           43323536000              5000
+## 5                       HAIL           15727367053        3025537890
+## 6                FLASH FLOOD           16140812067        1421317100
+## 7                    DROUGHT            1046106000       13972566000
+## 8                  HURRICANE           11868319010        2741910000
+## 9                RIVER FLOOD            5118945500        5029459000
+## 10                 ICE STORM            3944927860        5022113500
+## 11            TROPICAL STORM            7703890550         678346000
+## 12              WINTER STORM            6688497251          26944000
+## 13                 HIGH WIND            5270046295         638571300
+## 14                  WILDFIRE            4765114000         295472800
+## 15                 TSTM WIND            4484958495         554007350
+## 16          STORM SURGE/TIDE            4641188000            850000
+## 17         THUNDERSTORM WIND            3483121284         414843050
+## 18            HURRICANE OPAL            3152846020           9000010
+## 19          WILD/FOREST FIRE            3001829500         106796830
+## 20 HEAVY RAIN/SEVERE WEATHER            2500000000                 0
+```
+
+Let's additionally examine top 20 property damage causes:
+
+
+```r
+select(slice(arrange(data_per_type, desc(TOTAL_PROPERTY_DAMAGE)), 1:20), EVTYPE, TOTAL_PROPERTY_DAMAGE)
+```
+
+```
+## Source: local data frame [20 x 2]
+## 
+##                       EVTYPE TOTAL_PROPERTY_DAMAGE
+## 1                      FLOOD          144657709807
+## 2          HURRICANE/TYPHOON           69305840000
+## 3                    TORNADO           56925660790
+## 4                STORM SURGE           43323536000
+## 5                FLASH FLOOD           16140812067
+## 6                       HAIL           15727367053
+## 7                  HURRICANE           11868319010
+## 8             TROPICAL STORM            7703890550
+## 9               WINTER STORM            6688497251
+## 10                 HIGH WIND            5270046295
+## 11               RIVER FLOOD            5118945500
+## 12                  WILDFIRE            4765114000
+## 13          STORM SURGE/TIDE            4641188000
+## 14                 TSTM WIND            4484958495
+## 15                 ICE STORM            3944927860
+## 16         THUNDERSTORM WIND            3483121284
+## 17            HURRICANE OPAL            3152846020
+## 18          WILD/FOREST FIRE            3001829500
+## 19 HEAVY RAIN/SEVERE WEATHER            2500000000
+## 20        THUNDERSTORM WINDS            1733459026
+```
+
+And top 20 crop damage causes:
+
+
+```r
+select(slice(arrange(data_per_type, desc(TOTAL_CROP_DAMAGE)), 1:20), EVTYPE, TOTAL_CROP_DAMAGE)
+```
+
+```
+## Source: local data frame [20 x 2]
+## 
+##               EVTYPE TOTAL_CROP_DAMAGE
+## 1            DROUGHT       13972566000
+## 2              FLOOD        5661968450
+## 3        RIVER FLOOD        5029459000
+## 4          ICE STORM        5022113500
+## 5               HAIL        3025537890
+## 6          HURRICANE        2741910000
+## 7  HURRICANE/TYPHOON        2607872800
+## 8        FLASH FLOOD        1421317100
+## 9       EXTREME COLD        1312973000
+## 10      FROST/FREEZE        1094186000
+## 11        HEAVY RAIN         733399800
+## 12    TROPICAL STORM         678346000
+## 13         HIGH WIND         638571300
+## 14         TSTM WIND         554007350
+## 15    EXCESSIVE HEAT         492402000
+## 16            FREEZE         456725000
+## 17           TORNADO         414953270
+## 18 THUNDERSTORM WIND         414843050
+## 19              HEAT         401461500
+## 20   DAMAGING FREEZE         296230000
+```

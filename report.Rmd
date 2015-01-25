@@ -174,11 +174,36 @@ Finally, let's look at top 20 event types, calculated by our heuristic algo (fat
 select(slice(arrange(data_per_type, desc(TOTAL_POPULATION_DAMAGE)), 1:20), EVTYPE, TOTAL_FATALITIES, TOTAL_INJURIES)
 ```
 
+### Economical damage
+
+Let's first look at top 10 event types that causes economical damage:
+
 ```{r}
 ggplot(
 	slice(arrange(data_per_type, desc(TOTAL_ECONOMICAL_DAMAGE)), 1:10), 
 	aes(x = reorder(EVTYPE, TOTAL_ECONOMICAL_DAMAGE), y = TOTAL_ECONOMICAL_DAMAGE)
 ) + 
 geom_bar(stat="identity") + 
-coord_flip()
+coord_flip() + 
+labs(x = 'Event type') +
+labs(y = 'Economical damage in $') +
+labs(title = 'Total economical damage caused by top 10 event types')
+```
+
+Or, more detailed, table with top 20 event types:
+
+```{r}
+select(slice(arrange(data_per_type, desc(TOTAL_ECONOMICAL_DAMAGE)), 1:20), EVTYPE, TOTAL_PROPERTY_DAMAGE, TOTAL_CROP_DAMAGE)
+```
+
+Let's additionally examine top 20 property damage causes:
+
+```{r}
+select(slice(arrange(data_per_type, desc(TOTAL_PROPERTY_DAMAGE)), 1:20), EVTYPE, TOTAL_PROPERTY_DAMAGE)
+```
+
+And top 20 crop damage causes:
+
+```{r}
+select(slice(arrange(data_per_type, desc(TOTAL_CROP_DAMAGE)), 1:20), EVTYPE, TOTAL_CROP_DAMAGE)
 ```
